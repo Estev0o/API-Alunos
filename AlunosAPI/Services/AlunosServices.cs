@@ -13,7 +13,7 @@ namespace AlunosAPI.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Aluno>> GetAlunos()
+        public async Task<IEnumerable<Aluno>> GetStudents()
         {
             try
             {
@@ -26,7 +26,7 @@ namespace AlunosAPI.Services
             }
         }
 
-        public async Task<IEnumerable<Aluno>> GetAlunosByName(string nome)
+        public async Task<IEnumerable<Aluno>> GetStudentByName(string nome)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace AlunosAPI.Services
                 }
                 else
                 {
-                    alunos = await GetAlunos();
+                    alunos = await GetStudent();
                 }
                 return alunos;
             }
@@ -49,26 +49,26 @@ namespace AlunosAPI.Services
             }
         }
 
-        public async Task<Aluno> GetAluno(int id)
+        public async Task<Aluno> GetStudent(int id)
         {
             var aluno = await _context.Alunos.FindAsync(id);
             //FindAync proporciona um desempenho melhor do que o método FistOrDefault, pois busca os dados na memória.
             return aluno;
         }
 
-        public async Task CreateAluno(Aluno aluno)
+        public async Task CreateStudent(Aluno aluno)
         {
             _context.Alunos.Add(aluno);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAluno(Aluno aluno)
+        public async Task UpdateStudent(Aluno aluno)
         {
             _context.Entry(aluno).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAluno(Aluno aluno)
+        public async Task DeleteStudent(Aluno aluno)
         {
             _context.Alunos.Remove(aluno);
             await _context.SaveChangesAsync();
