@@ -38,7 +38,7 @@ namespace AlunosAPI.Services
                 }
                 else
                 {
-                    alunos = await GetStudent();
+                    alunos = await GetStudents();
                 }
                 return alunos;
             }
