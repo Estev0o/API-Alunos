@@ -33,12 +33,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+var devClient = "http://localhost:3000";
 app.UseCors(options =>
 {
-    options.WithOrigins("http://localhost:3000");
+    options.AllowAnyMethod();
+    options.AllowAnyOrigin();
     options.AllowAnyHeader();
-    options.AllowAnyHeader();
+    options.WithOrigins(devClient);
 });
 
 app.UseHttpsRedirection();
