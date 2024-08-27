@@ -1,5 +1,6 @@
 ﻿using AlunosAPI.Models;
 using AlunosAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
@@ -18,6 +19,8 @@ namespace AlunosAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
+        [Route("/api/List")]
         public async Task<ActionResult<IAsyncEnumerable<Aluno>>> GetStudents()
         {
             try
@@ -33,7 +36,8 @@ namespace AlunosAPI.Controllers
         }
 
         [HttpGet]
-        [Route("StudentsByName")]
+        [Produces("application/json")]
+        [Route("/StudentsByName")]
         public async Task<ActionResult<IAsyncEnumerable<Aluno>>> GetStudentsbyName([FromQuery] string nameStudents)
         {
 
