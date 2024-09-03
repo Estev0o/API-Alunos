@@ -13,11 +13,14 @@ namespace AlunosAPI.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Aluno>> GetStudents()
+        public async Task<IEnumerable<Aluno>> GetStudents(int skip, int take)
         {
             try
             {
-                return await _context.Alunos.ToListAsync();
+                return await _context.Alunos
+               .Skip(skip)
+               .Take(take)
+               .ToListAsync();
             }
             catch (Exception)
             {
@@ -38,7 +41,7 @@ namespace AlunosAPI.Services
                 }
                 else
                 {
-                    alunos = await GetStudents();
+                    alunos = await GetStudents(0, int.MaxValue);
                 }
                 return alunos;
             }
