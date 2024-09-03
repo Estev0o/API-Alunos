@@ -3,31 +3,44 @@ using AlunosAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using AlunosAPI.Context;
 
 namespace AlunosAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Produces("application/json")]
+    [Produces("application/json")]
     public class AlunosController : ControllerBase
     {
         private IAlunoService _alunoService;
-        public AlunosController(IAlunoService alunoService)
+        private AppDbContext _context;
+
+        public AlunosController(IAlunoService alunoService, AppDbContext context)
         {
             _alunoService = alunoService;
+            _context = context;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("/api/List")]
-        public async Task<ActionResult<IAsyncEnumerable<Aluno>>> GetStudents()
+        [Route("/List")]
+        public async Task<ActionResult<IAsyncEnumerable<Aluno>>> GetStudents([FromQuery] int skip = 0, [FromQuery] int take = 10)
         {
             try
             {
-                var students = await _alunoService.GetStudents();
+                var totalCount = await _context.Alunos.CountAsync(); // Total count sem filtro
 
-                return Ok(students);
+                var students = await _alunoService.GetStudents(skip, take);
+
+                return Ok(new
+                {
+                    TotalCount = totalCount,
+                    Skip = skip,
+                    Take = take,
+                    Students = students
+                });
             }
             catch
             {
@@ -80,7 +93,8 @@ namespace AlunosAPI.Controllers
         }
 
         [HttpPost]
-        [Route("CreateStudent")]
+        [AllowAnonymous]
+        [Route("/CreateStudent")]
         public async Task<ActionResult> CreateStudent(Aluno student)
         {
             try
